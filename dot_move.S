@@ -1,3 +1,5 @@
+.define player_pos $0200
+.define command_address $4000
 .ORG $8000
 start:
 LDX #$FF
@@ -7,17 +9,17 @@ LDX #0
 
 loop:
 LDA #1
-STA $0200, X
-LDA $4000
+STA player_pos, X
+LDA command_address
 BNE else
 JMP loop
 else:
+JSR clear
 JSR command
-BNE loop
+JMP loop
 
 
 command:
-JSR clear
 CMP #08
 BEQ move_right
 CMP #04
@@ -50,7 +52,7 @@ RTS
 clear:
 TAY
 LDA #0
-STA $0200, X
+STA player_pos, X
 TYA
 RTS
 
